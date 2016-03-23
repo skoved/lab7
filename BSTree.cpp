@@ -1,4 +1,6 @@
 #include "BSTree.h"
+#include <vector>
+using namespace std;
 
 BSTree::Node::Node(int data){
     this->data = data;
@@ -11,6 +13,14 @@ BSTree::Node::Node(int data, Node* parent){
 
 BSTree::BSTree(){
     root = nullptr;
+}
+
+BSTree::BSTree(BSTree &tree){
+    this->root = tree.root;
+}
+
+BSTree::~BSTree(){
+    delete root;
 }
 
 bool BSTree::empty(){
@@ -90,4 +100,12 @@ bool BSTree::find(int value, Node* current){
         return find(value, current->right);
     }
     return true;//value is already in the BST
+}
+
+void BSTree::sortedArray(vector<int> &list){
+    return;
+}
+
+bool BSTree::remove(int num){
+    return true;
 }
