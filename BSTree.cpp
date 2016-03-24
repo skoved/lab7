@@ -15,12 +15,39 @@ BSTree::BSTree(){
     root = nullptr;
 }
 
-BSTree::BSTree(BSTree &tree){
-    this->root = tree.root;
+BSTree::BSTree(const BSTree &tree){
+    this->root = new Node(tree.root->data);
+    if(tree.root != nullptr){
+        preOrder(tree.root->left, this->root);
+        preOrder(tree.root->right, this->root);
+    }
+}
+
+void BSTree::preOrder(Node* value, Node* parent){
+    if(value == nullptr)
+        return;
+    else if(parent->left == nullptr){
+        parent->left = new Node(value->data, parent);
+        preOrder(value->left, parent->left);
+        preOrder(value->right, parent->left)
+    }
+    else{
+        parent->right = new Node(value->data, parent);
+        preOrder(value->left, parent->right);
+        preOrder(value->right, parent->right);
+    }
 }
 
 BSTree::~BSTree(){
-    delete root;
+    postOrder(root);
+}
+
+void BSTree::postOrder(Node* current){
+    if(current == nullptr)
+        return
+    postOrder(current->left);
+    postOrder(current->right);
+    removeLeaf(current);
 }
 
 bool BSTree::empty(){

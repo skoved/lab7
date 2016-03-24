@@ -16,6 +16,8 @@ class BSTree{
         Node* root;
         bool insert(int value, Node* current);//the recursive part of insert
         bool find(int value, Node* current);//the recursive part of find
+        void preOrder(Node* value, Node* parent);
+        void postOrder(Node* current);
     public:
         BSTree();//creates a new tree with a null root
         BSTree(BSTree &tree);//creates of deep copy of tree
