@@ -16,11 +16,12 @@ class BSTree{
         Node* root;
         bool insert(int value, Node* current);//the recursive part of insert
         bool find(int value, Node* current);//the recursive part of find
-        void preOrder(Node* value, Node* parent);
-        void postOrder(Node* current);
+        void preOrder(Node* current);//recursive helper method for copy constructor
+        void postOrder(Node* current);//recursive helper method fordestructor
+        void inOrder(Node* current);//recursive helper method for sortedArray
     public:
         BSTree();//creates a new tree with a null root
-        BSTree(BSTree &tree);//creates of deep copy of tree
+        BSTree(const BSTree &tree);//creates of deep copy of tree
         ~BSTree();//removes all allocated memory for the tree
         bool empty();//returns true if the BST is empty
         bool insert(int value);//inserts value into the BST; returns true if the value is inserted

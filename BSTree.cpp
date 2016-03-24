@@ -16,25 +16,20 @@ BSTree::BSTree(){
 }
 
 BSTree::BSTree(const BSTree &tree){
-    this->root = new Node(tree.root->data);
-    if(tree.root != nullptr){
-        preOrder(tree.root->left, this->root);
-        preOrder(tree.root->right, this->root);
+    if(tree.root != nullptr){//checks if it is passed an empty tree
+        this->insert(tree.root->data);
+        preOrder(tree.root->left);
+        preOrder(tree.root->right);
     }
+    else
+        this->root = nullptr;
 }
 
-void BSTree::preOrder(Node* value, Node* parent){
-    if(value == nullptr)
-        return;
-    else if(parent->left == nullptr){
-        parent->left = new Node(value->data, parent);
-        preOrder(value->left, parent->left);
-        preOrder(value->right, parent->left)
-    }
-    else{
-        parent->right = new Node(value->data, parent);
-        preOrder(value->left, parent->right);
-        preOrder(value->right, parent->right);
+void BSTree::preOrder(Node* current){
+    if(value != nullptr){
+        insert(current->data);
+        preOrder(current->left);
+        preOrder(current->right);
     }
 }
 
@@ -43,11 +38,11 @@ BSTree::~BSTree(){
 }
 
 void BSTree::postOrder(Node* current){
-    if(current == nullptr)
-        return
-    postOrder(current->left);
-    postOrder(current->right);
-    removeLeaf(current);
+    if(current != nullptr){
+        postOrder(current->left);
+        postOrder(current->right);
+        removeLeaf(current);
+    }
 }
 
 bool BSTree::empty(){
@@ -130,7 +125,19 @@ bool BSTree::find(int value, Node* current){
 }
 
 void BSTree::sortedArray(vector<int> &list){
-    return;
+    if(root != nullptr){
+        inOrder(root->left);
+        list.push_back(root->data);
+        inOrder(root->right);
+    }
+}
+
+void BSTree::inOrder(Node* current){
+    if(current != nullptr){
+        inOrder(current->left);
+        list.push_back(current->data);
+        inOrder(current->right);
+    }
 }
 
 bool BSTree::remove(int num){
