@@ -19,6 +19,11 @@ class BSTree{
         void preOrder(Node* current);//recursive helper method for copy constructor
         void postOrder(Node* current);//recursive helper method fordestructor
         void inOrder(Node* current);//recursive helper method for sortedArray
+        Node* find(int value, Node* current);//returns the node holds the value in the tree
+        void removeLeaf(Node* node);//removal for a leaf node
+        void shortCircuit(Node* node);//removal for a node with one child
+        void promote(Node* node);//removal for a node with two children
+        Node* findMax(Node* node);//finds the max node on the left branch
     public:
         BSTree();//creates a new tree with a null root
         BSTree(const BSTree &tree);//creates of deep copy of tree
@@ -27,6 +32,6 @@ class BSTree{
         bool insert(int value);//inserts value into the BST; returns true if the value is inserted
         bool find(int value);//returns true if value is in BST
         void sortedArray(std::vector<int> &list);//fills the vector with tree values in sorted order
-        bool remove(int num);//removes the value from the tree
+        bool remove(int value);//removes the value from the tree
 };
 #endif

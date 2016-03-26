@@ -140,6 +140,80 @@ void BSTree::inOrder(Node* current){
     }
 }
 
-bool BSTree::remove(int num){
+bool BSTree::remove(int value){
+    Node* node = find(value, root)
+    if(node == nullptr)
+        return false;
+    if(node->left == nullptr && node->right == nullptr)
+        removeLeaf(node);
+    else if(node->left == nullptr || node->right == nullptr)
+        shortCircuit(node);
+    else
+        promote(node);
     return true;
+}
+
+Node* BSTree::find(int value, Node* current){
+    if(value < current->data){//check to see if the value should belong to the left branch
+        if(current->left == nullptr){
+            return nullptr;
+        }
+        return find(value, current->left);
+    }
+    else if(value > current->data){//check to see if the value should belong to the right branch
+        if(current->right == nullptr){
+            return nullptr;
+        }
+        return find(value, current->right);
+    }
+    return current;
+}
+
+void BSTree::removeLeaf(Node* node){
+    if(root == node)
+        root == nullptr;
+    else if(node->parent->right == node)
+        node->parent->right = nullptr;
+    else 
+        node->parent->left = nullptr;
+    delete node;
+}
+
+void BSTree::shortCircuit(Node* node){
+    if(node == root){
+        if(node->left != nullptr)
+            root = node->left;
+        else
+            root = node->right;
+        delete node;
+    }
+    else if(node->parent->right == node){
+        if(node->right != nullptr)
+            node->parent->right = node->right;
+        else
+            node->parent->right = node->left;
+    }
+    else{
+        if(node->right != nullptr)
+            node->parent->left = node->right;
+        else
+            node->parent->left = node->left;
+    }
+    delete node;
+}
+
+void BSTree::promote(Node* node){
+    Node* temp = findMax(node);
+    node->data = temp->data;
+    if(temp->left == nullptr || temp->right == nullptr){
+        shortCircuit(temp);
+    else
+        removeLeaf(temp);
+}
+
+Node* BSTree::findMax(Node* node){
+    node = node->left;
+    while(node->right != nullptr)
+        node = node->right;
+    return node;
 }
