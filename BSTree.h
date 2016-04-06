@@ -12,14 +12,15 @@ class BSTree{
                 Node* right;
                 Node(int data);//creates a node with all nullptrs
                 Node(int data, Node* parent);//creates a node w/ a parent ptr
+                Node(const Node &node);
         };
         Node* root;
         bool insert(int value, Node* current);//the recursive part of insert
         bool find(int value, Node* current);//the recursive part of find
         void preOrder(Node* current);//recursive helper method for copy constructor
         void postOrder(Node* current);//recursive helper method fordestructor
-        void inOrder(Node* current);//recursive helper method for sortedArray
-        Node* find(int value, Node* current);//returns the node holds the value in the tree
+        void inOrder(Node* current, std::vector<int> &list);//recursive helper method for sortedArray
+        Node* get(int value, Node* current);//returns the node holds the value in the tree
         void removeLeaf(Node* node);//removal for a leaf node
         void shortCircuit(Node* node);//removal for a node with one child
         void promote(Node* node);//removal for a node with two children

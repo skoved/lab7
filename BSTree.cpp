@@ -4,11 +4,23 @@ using namespace std;
 
 BSTree::Node::Node(int data){
     this->data = data;
+    this->parent = nullptr;
+    this->left = nullptr;
+    this->right = nullptr;
 }
 
 BSTree::Node::Node(int data, Node* parent){
     this->data = data;
     this->parent = parent;
+    this->left = nullptr;
+    this->right = nullptr;
+}
+
+BSTree::Node::Node(const Node &node){
+    this->data = node.data;
+    this->parent = node.parent;
+    this->left = node.left;
+    this->right = node.right;
 }
 
 BSTree::BSTree(){
@@ -26,7 +38,7 @@ BSTree::BSTree(const BSTree &tree){
 }
 
 void BSTree::preOrder(Node* current){
-    if(value != nullptr){
+    if(current != nullptr){
         insert(current->data);
         preOrder(current->left);
         preOrder(current->right);
@@ -126,22 +138,22 @@ bool BSTree::find(int value, Node* current){
 
 void BSTree::sortedArray(vector<int> &list){
     if(root != nullptr){
-        inOrder(root->left);
+        inOrder(root->left, list);
         list.push_back(root->data);
-        inOrder(root->right);
+        inOrder(root->right, list);
     }
 }
 
-void BSTree::inOrder(Node* current){
+void BSTree::inOrder(Node* current, vector<int> &list){
     if(current != nullptr){
-        inOrder(current->left);
+        inOrder(current->left, list);
         list.push_back(current->data);
-        inOrder(current->right);
+        inOrder(current->right, list);
     }
 }
 
 bool BSTree::remove(int value){
-    Node* node = find(value, root)
+    Node* node = get(value, root);
     if(node == nullptr)
         return false;
     if(node->left == nullptr && node->right == nullptr)
@@ -153,25 +165,27 @@ bool BSTree::remove(int value){
     return true;
 }
 
-Node* BSTree::find(int value, Node* current){
+BSTree::Node* BSTree::get(int value, Node* current){
+    if(current == nullptr)
+        return nullptr;
     if(value < current->data){//check to see if the value should belong to the left branch
         if(current->left == nullptr){
             return nullptr;
         }
-        return find(value, current->left);
+        return get(value, current->left);
     }
     else if(value > current->data){//check to see if the value should belong to the right branch
         if(current->right == nullptr){
             return nullptr;
         }
-        return find(value, current->right);
+        return get(value, current->right);
     }
     return current;
 }
 
 void BSTree::removeLeaf(Node* node){
     if(root == node)
-        root == nullptr;
+        root = nullptr;
     else if(node->parent->right == node)
         node->parent->right = nullptr;
     else 
@@ -181,23 +195,34 @@ void BSTree::removeLeaf(Node* node){
 
 void BSTree::shortCircuit(Node* node){
     if(node == root){
-        if(node->left != nullptr)
+        if(node->left != nullptr){
             root = node->left;
-        else
+            root->parent = nullptr;
+        }
+        else{
             root = node->right;
-        delete node;
+            root->parent = nullptr;
+        }
     }
     else if(node->parent->right == node){
-        if(node->right != nullptr)
+        if(node->right != nullptr){
             node->parent->right = node->right;
-        else
+            node->right->parent = node->parent;
+        }
+        else{
             node->parent->right = node->left;
+            node->left->parent = node->parent;
+        }
     }
     else{
-        if(node->right != nullptr)
+        if(node->right != nullptr){
             node->parent->left = node->right;
-        else
+            node->right->parent = node->parent;
+        }
+        else{
             node->parent->left = node->left;
+            node->left->parent = node->parent;
+        }
     }
     delete node;
 }
@@ -205,15 +230,19 @@ void BSTree::shortCircuit(Node* node){
 void BSTree::promote(Node* node){
     Node* temp = findMax(node);
     node->data = temp->data;
-    if(temp->left == nullptr || temp->right == nullptr){
-        shortCircuit(temp);
-    else
+    if(temp->left == nullptr && temp->right == nullptr)
         removeLeaf(temp);
+    else
+        shortCircuit(temp);
 }
 
-Node* BSTree::findMax(Node* node){
+BSTree::Node* BSTree::findMax(Node* node){
+    Node* temp = node;
     node = node->left;
-    while(node->right != nullptr)
+    while(node->right != nullptr){
+        temp = node;
         node = node->right;
+        node->parent = temp;
+    }
     return node;
 }
